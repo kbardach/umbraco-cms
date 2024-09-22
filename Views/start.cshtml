@@ -1,9 +1,14 @@
 ﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using kim_umbraco.Models.ViewModels
 
-@inherits UmbracoViewPage<Start>
+@inherits UmbracoViewPage<StartPageViewModel>
 
 @{
-	Layout = "master.cshtml";
+	Layout = "root.cshtml";
 }
 
-<h1>@Html.Raw(Model.Heading)</h1>
+<h1>@Html.Raw(Model.Content.Heading)</h1>
+
+<h1>@Html.Raw(Model.StartPage.Name)</h1>
+
+<h1>@Html.Raw(Model.SettingsPage.Name)</h1>
