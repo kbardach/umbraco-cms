@@ -1,11 +1,13 @@
-﻿using Umbraco.Cms.Core.Models.PublishedContent;
+﻿using kim_umbraco.Models.Interfaces;
+using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.Common.PublishedModels;
 
 namespace kim_umbraco.Models
 {
-    public class BasePageModel<T> : IPublishedContent where T : IPublishedContent
-    {
+	//public class BasePageModel<T> : IPublishedContent where T : IPublishedContent
+	public class BasePageModel<T> : IPageModel where T : IPublishedContent
+	{
         private readonly IUmbracoContextAccessor _umbracoContextAccessor;
 
         public T Content { get; set; }
@@ -83,7 +85,9 @@ namespace kim_umbraco.Models
 
         public IEnumerable<IPublishedProperty> Properties => MapProperty(c => c.Properties);
 
-        public bool IsDraft(string? culture = null)
+		IPublishedContent IPageModel.Content => Content;
+
+		public bool IsDraft(string? culture = null)
         {
             return Content.IsDraft();
         }

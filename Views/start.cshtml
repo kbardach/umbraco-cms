@@ -4,11 +4,135 @@
 @inherits UmbracoViewPage<StartPageViewModel>
 
 @{
-	Layout = "root.cshtml";
+    Layout = "root.cshtml";
+
+    var slideshow = Model.SettingsPage.LinkToSlideshow?.Children<Slide>();
+
 }
 
-<h1>@Html.Raw(Model.Content.Heading)</h1>
+@* @foreach (var slide in slideshow)
+{
+    <img src="@slide.Image?.Url()" />
+    <h1>@slide.Heading</h1>
+    <h2>@slide.Text</h2>
+    @slide.Link.Name
+    @slide.Link.Url
+} *@
+
+@* <h1>@Html.Raw(Model.Content.Heading)</h1>
 
 <h1>@Html.Raw(Model.StartPage.Name)</h1>
 
-<h1>@Html.Raw(Model.SettingsPage.Name)</h1>
+<h1>@Html.Raw(Model.SettingsPage.Name)</h1> *@
+
+<main>
+    <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
+
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-label="Slide 1" aria-current="true"></button>
+            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2" class=""></button>
+            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3" class=""></button>
+        </div>
+
+        <div class="carousel-inner">
+        
+        @foreach (var slide in slideshow)
+        {
+            var isActive = slideshow.IndexOf(slide) == 0 ? "active" : "";
+            <div class="carousel-item @isActive">
+                <img src="@slide.Image?.Url()" class="d-block w-100" alt="@slide.Heading">
+                <div class="carousel-caption">
+                    <h1>@slide.Heading</h1>
+                    <h2>@slide.Text</h2>
+                    <p><a class="btn btn-lg btn-primary" href="@slide.Link.Url">@slide.Link.Name</a></p>
+                </div>
+            </div>
+        }
+    </div>
+
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+
+
+    </div>
+    <div class="album py-5 bg-body-tertiary">
+        <div class="container">
+
+            <!-- Genre: Action -->
+            <h5 class="mb-3">Action</h5>
+            <div class="row row-cols-1 row-cols-sm-3 row-cols-md-4 g-4">
+                <div class="col">
+                    <div class="card shadow-sm h-100">
+
+                        <img src="https://localhost:44328/media/movies/inception.webp" class="movie-card" />
+                        <div class="card-body">
+                            <p class="card-text">A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O., but his tragic past may doom the project and his team to disaster.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-body-secondary">2h 28m</small>
+                            </div>
+                        </div>
+                        <a href="/filmer/inception" class="stretched-link"></a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card shadow-sm h-100">
+                        <img src="https://localhost:44328/media/movies/seven.jpg" class="movie-card" />
+                        <div class="card-body">
+                            <p class="card-text">Two detectives, a rookie and a veteran, hunt a serial killer who uses the seven deadly sins as his motives.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-body-secondary">2h 7m</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- More cards for "Action" genre -->
+            </div>
+
+            <!-- Genre: Comedy -->
+            <h5 class="mt-5 mb-3">Comedy</h5>
+            <div class="row row-cols-1 row-cols-sm-3 row-cols-md-4 g-4">
+                <div class="col">
+                    <div class="card shadow-sm h-100">
+                        <img src="https://localhost:44328/media/movies/superbad.jpg" class="movie-card" />
+                        <div class="card-body">
+                            <p class="card-text">Two co-dependent high school seniors are forced to deal with separation anxiety after their plan to stage a booze-soaked party goes awry.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-body-secondary">1h 53m</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- More cards for "Comedy" genre -->
+            </div>
+
+            <!-- Genre: Drama -->
+            <h5 class="mt-5 mb-3">Drama</h5>
+            <div class="row row-cols-1 row-cols-sm-3 row-cols-md-4 g-4">
+                <div class="col">
+                    <div class="card shadow-sm h-100">
+                        <img src="https://localhost:44328/media/movies/house-of-gucci.jpg" class="movie-card" />
+                        <div class="card-body">
+                            <p class="card-text">When Patrizia Reggiani, an outsider from humble beginnings, marries into the Gucci family, her unbridled ambition begins to unravel their legacy and triggers a reckless spiral of betrayal, decadence, revenge, and ultimately...murder.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-body-secondary">2h 17m</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- More cards for "Drama" genre -->
+            </div>
+
+            <!-- Add more genres as needed -->
+        </div>
+    </div>
+
+</main>
