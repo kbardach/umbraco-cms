@@ -1,56 +1,86 @@
-﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+﻿@using Umbraco.Cms.Core.Models.Blocks
+@using Umbraco.Cms.Web.Common.PublishedModels;
 @using kim_umbraco.Models.ViewModels
+@using Umbraco.Extensions;
 
 @inherits UmbracoViewPage<StartPageViewModel>
 
 @{
     Layout = "root.cshtml";
+    // var slideshow = Model.SettingsPage.LinkToSlideshow?.Children<Slide>();
 
-    var slideshow = Model.SettingsPage.LinkToSlideshow?.Children<Slide>();
-
+    var blockGrid = Model.Value<BlockGridModel>("content");
 }
 
-@* @foreach (var slide in slideshow)
-{
-    <img src="@slide.Image?.Url()" />
-    <h1>@slide.Heading</h1>
-    <h2>@slide.Text</h2>
-    @slide.Link.Name
-    @slide.Link.Url
-} *@
-
-@* <h1>@Html.Raw(Model.Content.Heading)</h1>
-
-<h1>@Html.Raw(Model.StartPage.Name)</h1>
-
-<h1>@Html.Raw(Model.SettingsPage.Name)</h1> *@
 
 <main>
-    <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
+    @* @if (slideshow != null && slideshow.Any())
+    {
+        @Html.Partial("SlideshowComponent", slideshow)
+    } *@
 
+
+    @if (blockGrid != null && blockGrid.Any())
+    {
+        foreach (var block in blockGrid)
+        {
+            if (block.Content != null)
+            {
+                var contentTypeAlias = block.Content.ContentType.Alias;
+
+                switch (contentTypeAlias)
+                {
+                    case "slideshowBlock":
+                        @await Html.PartialAsync("SlideshowBlock", block.Content)
+                        break;
+                }
+            }
+        }
+    }
+
+</main>
+
+
+
+
+@* <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-label="Slide 1" aria-current="true"></button>
             <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2" class=""></button>
             <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3" class=""></button>
         </div>
-
         <div class="carousel-inner">
-        
-        @foreach (var slide in slideshow)
-        {
-            var isActive = slideshow.IndexOf(slide) == 0 ? "active" : "";
-            <div class="carousel-item @isActive">
-                <img src="@slide.Image?.Url()" class="d-block w-100" alt="@slide.Heading">
-                <div class="carousel-caption">
-                    <h1>@slide.Heading</h1>
-                    <h2>@slide.Text</h2>
-                    <p><a class="btn btn-lg btn-primary" href="@slide.Link.Url">@slide.Link.Name</a></p>
+            <div class="carousel-item active">
+                <img src="https://localhost:44328/media/carousel/spiderman.jpg" class="carousel-poster" />
+                <div class="container">
+                    <div class="carousel-caption text-start">
+                        <h1>Example headline.</h1>
+                        <p class="opacity-75">Some representative placeholder content for the first slide of the carousel.</p>
+                        <p><a class="btn btn-lg btn-primary" href="#">Sign up today</a></p>
+                    </div>
                 </div>
             </div>
-        }
-    </div>
-
-
+            <div class="carousel-item">
+                <img src="https://localhost:44328/media/carousel/frozen.jpeg" class="carousel-poster" />
+                <div class="container">
+                    <div class="carousel-caption">
+                        <h1>Another example headline.</h1>
+                        <p>Some representative placeholder content for the second slide of the carousel.</p>
+                        <p><a class="btn btn-lg btn-primary" href="#">Learn more</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="https://localhost:44328/media/carousel/breaking-bad.jpg" class="carousel-poster" />
+                <div class="container">
+                    <div class="carousel-caption text-end">
+                        <h1>One more for good measure.</h1>
+                        <p>Some representative placeholder content for the third slide of this carousel.</p>
+                        <p><a class="btn btn-lg btn-primary" href="#">Browse gallery</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
@@ -59,9 +89,9 @@
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
         </button>
-
-
     </div>
+
+
     <div class="album py-5 bg-body-tertiary">
         <div class="container">
 
@@ -133,6 +163,4 @@
 
             <!-- Add more genres as needed -->
         </div>
-    </div>
-
-</main>
+    </div> *@

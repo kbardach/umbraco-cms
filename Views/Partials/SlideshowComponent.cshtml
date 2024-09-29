@@ -1,0 +1,41 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Extensions;
+
+@model IEnumerable<Slide>  // Passa in en lista med slides
+
+<div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        @for (var i = 0; i < Model.Count(); i++)
+        {
+            var activeClass = i == 0 ? "active" : "";
+            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="@i" class="@activeClass" aria-label="Slide @(i + 1)" aria-current="@(i == 0 ? "true" : "false")"></button>
+        }
+    </div>
+
+    <div class="carousel-inner">
+        @foreach (var slide in Model)
+        {
+            var isActive = Model.IndexOf(slide) == 0 ? "active" : "";
+            <div class="carousel-item @isActive">
+                <img src="@slide.Image?.Url()" class="d-block w-100" alt="@slide.Heading" style="height: 50vh;">
+                <div class="carousel-caption">
+                    <h1>@slide.Heading</h1>
+                    <h2>@slide.Text</h2>
+                    <p><a class="btn btn-lg btn-primary" href="@slide.Link.Url">@slide.Link.Name</a></p>
+                </div>
+            </div>
+        }
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+
+
