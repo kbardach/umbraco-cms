@@ -1,0 +1,81 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using kim_umbraco.Models.ViewModels
+
+@inherits UmbracoViewPage<MoviePageViewModel>
+
+@{
+    Layout = "root.cshtml";
+}
+
+<style>
+    .movie-detail-container {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .poster-image-detail {
+        width: 100%;
+        max-width: 300px; /* Adjust the max width for the poster */
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .movie-title-detail {
+        font-size: 2em;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .movie-year-detail {
+        font-size: 1.1em;
+        color: #666;
+    }
+
+    .movie-runtime-detail,
+    .movie-plot-detail,
+    .movie-director-detail,
+    .movie-actors-detail {
+        font-size: 1em;
+        color: #555;
+        margin-top: 10px;
+    }
+
+    .text-warning {
+        color: gold;
+    }
+
+    /* Adjust the spacing for smaller screens */
+    @@media (max-width: 768px) {
+        .poster-image-detail {
+            max-width: 100%;
+        }
+
+        .movie-title-detail {
+            font-size: 1.5em;
+        }
+    }
+</style>
+
+
+<div class="container movie-detail-container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <!-- Movie Poster -->
+            <img src="@Model.Movie.Poster" onerror="this.src='/media/default-movie-poster.jpg'" class="poster-image-detail" alt="Static Movie Title Poster" />
+        </div>
+        <div class="col-md-8">
+            <!-- Movie Details -->
+            <h2 class="movie-title-detail">@Model.Movie.Title</h2>
+            <p class="movie-year-detail">@Model.Movie.Year | <span class="text-warning"><i class="fas fa-star"></i> @Model.Movie.ImdbRating</span></p>
+            <p class="movie-runtime-detail">@Model.Movie.Runtime</p>
+            <p class="movie-plot-detail">@Model.Movie.Plot</p>
+
+            <!-- Director and Actors -->
+            <p class="movie-director-detail"><strong>Director:</strong> @Model.Movie.Director</p>
+            <p class="movie-actors-detail"><strong>Actors:</strong> @Model.Movie.Actors</p>
+        </div>
+    </div>
+</div>

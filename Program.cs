@@ -1,3 +1,5 @@
+using kim_umbraco.Business.Services;
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.CreateUmbracoBuilder()
@@ -6,6 +8,8 @@ builder.CreateUmbracoBuilder()
     .AddDeliveryApi()
     .AddComposers()
     .Build();
+
+builder.Services.AddScoped<IMovieService, MovieService>();
 
 WebApplication app = builder.Build();
 

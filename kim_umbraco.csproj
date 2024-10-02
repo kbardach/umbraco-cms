@@ -4,6 +4,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Include="wwwroot\media\ca3ff4o2\island.jpg" />
+    <Content Include="wwwroot\media\default-movie-poster.jpg" />
+    <Content Include="wwwroot\media\dzgjflrq\space.jpg" />
+    <Content Include="wwwroot\media\eofnjdim\spidy.jpg" />
+    <Content Include="wwwroot\media\ipjlchqm\milkyway.jpg" />
+    <Content Include="wwwroot\media\lvlgqnsn\forrest_trees.jpg" />
+    <Content Include="wwwroot\media\oqlkymx5\mountains.jpg" />
+    <Content Include="wwwroot\media\swlbkf1w\vato.jpg" />
+    <Content Include="wwwroot\media\xzxjfika\spiderman1.jpg" />
+    <Content Include="wwwroot\media\yoclktpf\vato.jpg" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Umbraco.Cms" Version="14.2.0" />

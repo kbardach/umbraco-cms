@@ -1,0 +1,238 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using kim_umbraco.Models.ViewModels
+
+@inherits UmbracoViewPage<SearchPageViewModel>
+
+@{
+	Layout = "root.cshtml";
+}
+
+
+<style>
+    /* Search Box Styling (Squarish Corporate Design) */
+    .search-box {
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        background-color: #f1f1f1;
+        width: 100%; /* Full width */
+    }
+
+    .search-input {
+        border: 1px solid #ddd;
+        border-radius: 5px 0 0 5px; /* Squarish look with rounded left corner */
+        padding: 10px 20px;
+        transition: all 0.3s ease;
+    }
+
+        .search-input:focus {
+            border-color: #00509e; /* Dark corporate blue focus border */
+            box-shadow: 0 0 8px rgba(0, 80, 158, 0.2);
+        }
+
+    /* Updated styles for the magnifier button */
+    .input-group-text {
+        background-color: #00509e; /* Corporate blue */
+        border: none;
+        border-radius: 0 5px 5px 0; /* Rounded right corners */
+        color: white;
+        padding: 10px; /* Adjust padding for a more square fit */
+        width: 50px; /* Fixed width for square appearance */
+        display: flex;
+        justify-content: center; /* Center the icon */
+        align-items: center; /* Center the icon vertically */
+        cursor: pointer; /* Change cursor to pointer */
+        transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s; /* Add transitions for hover effects */
+    }
+
+        .input-group-text i {
+            margin: 0; /* Reset margin for the icon */
+        }
+
+        .input-group-text:hover {
+            background-color: #003d7a; /* Darker blue on hover */
+        }
+
+    /* Additional Styles (no changes needed) */
+    .mt-4 {
+        margin-top: 30px;
+    }
+
+    /* Search Results Styling */
+    .search-results ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .search-results .result-item {
+        background-color: #ffffff;
+        border-radius: 5px; /* Match the search input's border radius */
+        padding: 15px; /* Padding for a tighter design */
+        margin-bottom: 10px; /* Reduced bottom margin for less space between items */
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Reduced box shadow for a subtler effect */
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .search-results .result-item:hover {
+            transform: translateY(-3px); /* Reduced hover effect for a tighter feel */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Slightly more pronounced shadow on hover */
+        }
+
+    .search-results h5 {
+        margin: 0 0 5px; /* Reduced margin for a tighter header */
+        font-size: 1.3em; /* Slightly smaller font size for a more compact look */
+        color: #333;
+    }
+
+    .search-results p {
+        font-size: 0.9em; /* Reduced font size for a more concise description */
+        color: #666;
+        margin-bottom: 5px; /* Reduced margin for tighter spacing */
+    }
+
+    /* Add Me Button Styling (Green Theme) */
+    .add-me-btn {
+        background-color: #007a33; /* Green background */
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px; /* Reduced border radius for a squarish look */
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        white-space: nowrap; /* Prevents text from wrapping */
+    }
+
+        .add-me-btn:hover {
+            background-color: #005e2e; /* Darker green on hover */
+            transform: scale(1.03);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .add-me-btn:active {
+            background-color: #004b24; /* Even darker green when active */
+            transform: scale(1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+    .poster-image {
+        width: 100px;
+        height: auto; /* Keep the aspect ratio */
+        border-radius: 5px; /* Optional: rounded corners */
+    }
+
+    .movie-details {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .movie-title {
+        margin: 0; /* Ensure no extra margin on the title */
+    }
+
+    .movie-year {
+        margin: 0; /* Remove margin to ensure tight layout */
+        color: #666; /* Optional: Adjust year color */
+    }
+
+    .result-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: start; /* Align items at the top */
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        .result-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+    .text-warning {
+        color: gold; /* You can adjust this to your preferred shade of yellow */
+    }
+</style>
+
+<div class="container">
+    <!-- Search Form -->
+    <div class="row mt-5">
+        <div class="col-md-12">
+            @using (Html.BeginUmbracoForm("SearchMovie", "SearchSurface", FormMethod.Post, new {@class = "d-flex", @id = "searchForm"}))
+            {
+                <div class="input-group search-box">
+                    <input class="form-control search-input" id="searchQuery" name="query" type="search" placeholder="Search for a movie" aria-label="Search">
+                    <button class="input-group-text search-button">
+                        <i class="fas fa-search"></i> <!-- Magnifying glass icon -->
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Search Results -->
+    <div class="search-results mt-4" id="searchResults">
+        <ul>
+            @* @foreach (var item in Model.Movies)
+            {
+                @using (Html.BeginUmbracoForm("Index", "MovieSurface", FormMethod.Post ))
+                {
+                    <button type="submit" class="p-0 border-0 bg-transparent text-start">
+                        <li class="result-item d-flex align-items-start">
+                            <div class="d-flex">
+                                <img src="@item.Poster" onerror="this.src='/media/default-movie-poster.jpg'" class="poster-image" alt="Poster" />
+                                <div class="movie-details ms-3">
+                                    <h5 class="movie-title">@item.Title</h5>
+                                    <p class="movie-plot">@item.Plot</p>
+                                    <p class="movie-year">
+                                            @item.Year | @item.Runtime |
+                                        <span class="text-warning"><i class="fas fa-star"></i></span> @item.ImdbRating
+                                    </p>
+                                </div>
+                            </div>
+
+                            <input type="hidden" name="id" value="@item.ImdbID" />
+                        </li>
+                    </button>
+                }
+            } *@
+
+            @foreach (var item in Model.Movies)
+            {
+                <li class="result-item d-flex align-items-start">
+                    @using (Html.BeginUmbracoForm("Index", "MovieSurface", FormMethod.Post))
+                    {
+                        <button type="submit" class="p-0 border-0 bg-transparent text-start">
+                            <div class="d-flex">
+                                <img src="@item.Poster" onerror="this.src='/media/default-movie-poster.jpg'" class="poster-image" alt="Poster" />
+                                <div class="movie-details ms-3">
+                                    <h5 class="movie-title">@item.Title</h5>
+                                    <p class="movie-plot">@item.Plot</p>
+                                    <p class="movie-year">@item.Year | @item.Runtime | <span class="text-warning"><i class="fas fa-star"></i></span> @item.ImdbRating</p>
+                                </div>
+                            </div>
+                        </button>
+                        <input type="hidden" name="title" value="@item.Title" />
+                        <input type="hidden" name="year" value="@item.Year" />
+                        <input type="hidden" name="runtime" value="@item.Runtime" />
+                        <input type="hidden" name="director" value="@item.Director" />
+                        <input type="hidden" name="actors" value="@item.Actors" />
+                        <input type="hidden" name="imdbrating" value="@item.ImdbRating" />
+                        <input type="hidden" name="imdbid" value="@item.ImdbID" />
+                        <input type="hidden" name="plot" value="@item.Plot" />
+                        <input type="hidden" name="poster" value="@item.Poster" />
+                    }
+                    @* <button class="add-me-btn ms-auto">+</button> *@
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+@* <button class="add-me-btn ms-auto">+</button> *@
