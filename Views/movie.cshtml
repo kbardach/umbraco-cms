@@ -7,58 +7,9 @@
     Layout = "root.cshtml";
 }
 
-<style>
-    .movie-detail-container {
-        background-color: #ffffff;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .poster-image-detail {
-        width: 100%;
-        max-width: 300px; /* Adjust the max width for the poster */
-        border-radius: 10px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .movie-title-detail {
-        font-size: 2em;
-        font-weight: bold;
-        margin-bottom: 10px;
-        color: #333;
-    }
-
-    .movie-year-detail {
-        font-size: 1.1em;
-        color: #666;
-    }
-
-    .movie-runtime-detail,
-    .movie-plot-detail,
-    .movie-director-detail,
-    .movie-actors-detail {
-        font-size: 1em;
-        color: #555;
-        margin-top: 10px;
-    }
-
-    .text-warning {
-        color: gold;
-    }
-
-    /* Adjust the spacing for smaller screens */
-    @@media (max-width: 768px) {
-        .poster-image-detail {
-            max-width: 100%;
-        }
-
-        .movie-title-detail {
-            font-size: 1.5em;
-        }
-    }
-</style>
-
+<head>
+    <link href="~/css/movie.css" rel="stylesheet" />
+</head>
 
 <div class="container movie-detail-container mt-5">
     <div class="row">

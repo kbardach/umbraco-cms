@@ -34,13 +34,3 @@ namespace kim_umbraco.Controllers
         }
     }
 }
-
-
-//[HttpPost]
-//[ValidateAntiForgeryToken]
-//public IActionResult Index(MovieDetails movie)
-//{
-
-//    //todo skapa viewmodel
-//    return View("movie");
-//}
