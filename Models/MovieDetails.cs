@@ -75,5 +75,8 @@ namespace kim_umbraco.Models
 
         [JsonProperty("Response")]
         public string Response { get; set; }
+
+        //tillagt för blazor
+        public string Culture { get; set; }
     }
 }

@@ -8,19 +8,22 @@
 @{
     Layout = "root.cshtml";
 
-    //denna är till för att köra utan block
+    //Denna är till för att köra ViewComponent
     // var slideshow = Model.SettingsPage.LinkToSlideshow?.Children<Slide>();
+
+    //Denna är till för att köra Block
     var blockGrid = Model.Value<BlockGridModel>("content");
 }
 
 
 <main>
+    @*Denna är till för att köra ViewComponent *@
     @* @if (slideshow != null && slideshow.Any())
     {
         @Html.Partial("SlideshowComponent", slideshow)
     } *@
 
-
+    @*Denna är till för att köra Block *@
     @if (blockGrid != null && blockGrid.Any())
     {
         foreach (var block in blockGrid)
@@ -38,7 +41,6 @@
             }
         }
     }
-
 </main>
 
 

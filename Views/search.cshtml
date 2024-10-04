@@ -1,5 +1,6 @@
 ﻿@using Umbraco.Cms.Web.Common.PublishedModels;
 @using kim_umbraco.Models.ViewModels
+@using kim_umbraco.Shared
 
 @inherits UmbracoViewPage<SearchPageViewModel>
 
@@ -11,7 +12,15 @@
     <link href="/css/search.css" rel="stylesheet" />
 </head>
 
-<div class="container">
+@* tillagt för blazor *@
+<component type="typeof(SearchBlazorPage)" render-mode="Server" />
+
+
+
+
+
+
+<@* div class="container">
     <!-- Search Form -->
     <div class="row mt-5">
         <div class="col-md-12">
@@ -30,30 +39,6 @@
     <!-- Search Results -->
     <div class="search-results mt-4" id="searchResults">
         <ul>
-            @* @foreach (var item in Model.Movies)
-            {
-                @using (Html.BeginUmbracoForm("Index", "MovieSurface", FormMethod.Post ))
-                {
-                    <button type="submit" class="p-0 border-0 bg-transparent text-start">
-                        <li class="result-item d-flex align-items-start">
-                            <div class="d-flex">
-                                <img src="@item.Poster" onerror="this.src='/media/default-movie-poster.jpg'" class="poster-image" alt="Poster" />
-                                <div class="movie-details ms-3">
-                                    <h5 class="movie-title">@item.Title</h5>
-                                    <p class="movie-plot">@item.Plot</p>
-                                    <p class="movie-year">
-                                            @item.Year | @item.Runtime |
-                                        <span class="text-warning"><i class="fas fa-star"></i></span> @item.ImdbRating
-                                    </p>
-                                </div>
-                            </div>
-
-                            <input type="hidden" name="id" value="@item.ImdbID" />
-                        </li>
-                    </button>
-                }
-            } *@
-
             @foreach (var item in Model.Movies)
             {
                 <li class="result-item d-flex align-items-start">
@@ -79,11 +64,10 @@
                         <input type="hidden" name="plot" value="@item.Plot" />
                         <input type="hidden" name="poster" value="@item.Poster" />
                     }
-                    @* <button class="add-me-btn ms-auto">+</button> *@
+                    <button class="add-me-btn ms-auto">+</button>
                 </li>
             }
         </ul>
     </div>
-</div>
+</div> *@
 
-@* <button class="add-me-btn ms-auto">+</button> *@

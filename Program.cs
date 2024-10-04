@@ -1,3 +1,4 @@
+using kim_umbraco.Business.ScheduledJobs;
 using kim_umbraco.Business.Services;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -9,9 +10,16 @@ builder.CreateUmbracoBuilder()
     .AddComposers()
     .Build();
 
+//tillagt för blazor
+builder.Services.AddServerSideBlazor();
+
 builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<IMoviesJob, MoviesJob>();
 
 WebApplication app = builder.Build();
+
+//tillagt för blazor
+app.MapBlazorHub();
 
 await app.BootUmbracoAsync();
 

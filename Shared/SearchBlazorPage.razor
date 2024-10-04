@@ -1,0 +1,159 @@
+﻿@page "/SearchBlazorPage"
+
+@inject IJSRuntime JSRuntime;
+@inject NavigationManager _navigationManager;
+@inject IVariationContextAccessor _variationContextAccessor;
+@inject IMovieService _movieService;
+
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.JSInterop
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using kim_umbraco.Business.Services
+@using kim_umbraco.Models
+@using kim_umbraco.Models.Blazor
+
+@code
+{
+    SearchModel searchModel = new SearchModel();
+    MovieDetails movieDetails = new MovieDetails();
+    List<MovieDetails> movies = new List<MovieDetails>();
+    bool isSearching = false; // Flag to track whether a search is in progress
+
+    private async Task FetchMoviesAsync()
+    {
+        try
+        {
+            isSearching = true; // Mark the search as started
+            StateHasChanged(); // Trigger a UI refresh
+
+            // Show spinner and disable the button and input
+            await JSRuntime.InvokeVoidAsync("toggleButtonState", "submitButton", true);
+            await JSRuntime.InvokeVoidAsync("disableInputField", "searchInput", true);
+
+            // Fetch movies
+            movies = await _movieService.GetMoviesWithDetailsAsync(searchModel.Query);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error fetching movies: {e.Message}");
+        }
+        finally
+        {
+            isSearching = false; // Mark the search as complete
+            StateHasChanged(); // Trigger a UI refresh
+
+            // Hide spinner and re-enable the button and input
+            await JSRuntime.InvokeVoidAsync("toggleButtonState", "submitButton", false);
+            await JSRuntime.InvokeVoidAsync("disableInputField", "searchInput", false);
+        }
+    }
+
+    public void OnMovieClick(MovieDetails item)
+    {
+        //var s  = movieDetails;
+        //Console.WriteLine("Movie clicked!");
+        //_navigationManager.NavigateTo($"/film");
+
+        StateHasChanged();
+    }
+
+    public void OnAddMovieClick(MovieDetails item)
+    {
+        item.Culture = _variationContextAccessor.VariationContext.Culture;
+        _movieService.AddMovie(item);
+
+        StateHasChanged();
+    }
+}
+
+<style>
+    /* Disable pointer cursor when button is disabled */
+    button[disabled] {
+        cursor: default;
+    }
+</style>
+
+<div class="container">
+    <!-- Search Form -->
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <EditForm Model="@searchModel" OnValidSubmit="FetchMoviesAsync">
+                <div class="input-group search-box">
+                    <InputText id="searchInput" class="form-control search-input" name="query" type="search" placeholder="Search for a movie" aria-label="Search" @bind-Value="searchModel.Query" disabled="@isSearching" />
+                    <button type="submit" class="input-group-text search-button" id="submitButton" disabled="@isSearching">
+                        <span class="button-text">
+                            <i class="fas fa-search"></i> <!-- Magnifying glass icon -->
+                        </span>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none;"></span>
+                    </button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+
+    <!-- Search Results -->
+    <div class="search-results mt-4" id="searchResults">
+        <ul>
+            @foreach (var item in movies)
+            {
+                <li class="result-item d-flex align-items-start">
+                    <!-- Form for selecting the movie -->
+                    <EditForm Model="@movieDetails" OnValidSubmit="@(() => OnMovieClick(item))">
+                        <button type="submit" class="p-0 border-0 bg-transparent text-start">
+                            <div class="d-flex">
+                                <img src="@item.Poster" onerror="this.src='/media/default-movie-poster.jpg'" class="poster-image" alt="Poster" />
+                                <div class="movie-details ms-3">
+                                    <h5 class="movie-title">@item.Title</h5>
+                                    <p class="movie-plot">@item.Plot</p>
+                                    <p class="movie-year">@item.Year | @item.Runtime | <span class="text-warning"><i class="fas fa-star"></i></span> @item.ImdbRating</p>
+                                </div>
+                            </div>
+                        </button>
+                    </EditForm>
+
+                    @if (!_movieService.MovieExists(item.ImdbID))
+                    {
+                        <EditForm Model="@movieDetails" OnValidSubmit="@(() => OnAddMovieClick(item))">
+                            <button type="submit" class="btn btn-outline-primary ms-2">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </EditForm> 
+                    }
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+<script>
+    function toggleButtonState(buttonId, isSubmitting) {
+        var submitButton = document.getElementById(buttonId);
+        if (!submitButton) return;
+
+        var spinner = submitButton.querySelector('.spinner-border');
+        var buttonText = submitButton.querySelector('.button-text');
+
+        if (isSubmitting) {
+            submitButton.disabled = true;
+            spinner.style.display = 'inline-block'; // Show spinner
+            buttonText.style.display = 'none'; // Hide text
+        } else {
+            submitButton.disabled = false;
+            spinner.style.display = 'none'; // Hide spinner
+            buttonText.style.display = 'inline-block'; // Show text (magnifying glass icon)
+        }
+    }
+
+    function disableInputField(inputId, isDisabled) {
+        var inputField = document.getElementById(inputId);
+        if (!inputField) return;
+        inputField.disabled = isDisabled;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var spinners = document.querySelectorAll('.spinner-border');
+        spinners.forEach(function (spinner) {
+            spinner.style.display = 'none'; // Hide all spinners by default
+        });
+    });
+</script>
