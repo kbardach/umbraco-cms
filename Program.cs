@@ -23,6 +23,14 @@ app.MapBlazorHub();
 
 await app.BootUmbracoAsync();
 
+//app.UseStatusCodePages(async context =>
+//{
+//	if (context.HttpContext.Response.StatusCode == 404)
+//	{
+//		context.HttpContext.Response.Redirect("/error");
+//		await Task.Yield();
+//	}
+//});
 
 app.UseUmbraco()
     .WithMiddleware(u =>
