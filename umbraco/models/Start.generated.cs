@@ -74,6 +74,14 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string MetaDescription => global::Umbraco.Cms.Web.Common.PublishedModels.Metadata.GetMetaDescription(this, _publishedValueFallback);
 
 		///<summary>
+		/// MetaRobots
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "14.2.0+1b21caa")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("metaRobots")]
+		public virtual string MetaRobots => global::Umbraco.Cms.Web.Common.PublishedModels.Seo.GetMetaRobots(this, _publishedValueFallback);
+
+		///<summary>
 		/// Title
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "14.2.0+1b21caa")]

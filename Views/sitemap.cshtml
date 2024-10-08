@@ -1,0 +1,63 @@
+﻿@using kim_umbraco.Business.Extensions
+@using kim_umbraco.Models.ViewModels
+@using System.Text
+@using Umbraco.Cms.Core.Models.Blocks
+@using Umbraco.Cms.Core.Services
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Microsoft.AspNetCore.Http
+
+@inherits UmbracoViewPage<SitemapViewModel>
+
+@inject IHttpContextAccessor _contentAccessor
+@inject IContentService _contentService
+
+@{
+    Layout = null;
+
+    _contentAccessor.HttpContext.Response.Clear();
+    _contentAccessor.HttpContext.Response.ContentType = "text/xml";
+
+    var stringBuilder = new StringBuilder();
+    var url = new StringBuilder();
+    var xmlversion = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+    var urlsetStart = "<urlset xmlns=\"https://www.sitemaps.org/schemas/sitemap/0.9\">";
+    var urlsetEnd = "</urlset>";
+
+    if (Model.Pages != null)
+    {
+        foreach (var page in Model.Pages)
+        {
+            foreach (var culture in page.Cultures)
+            {
+                var contentItem = _contentService.GetById(page.Id);
+
+                if (contentItem?.PublishDate.HasValue == true)
+                {
+                    var metaRobots = contentItem.GetValue<string>("metaRobots", culture.Key);
+
+                    if (!string.IsNullOrEmpty(metaRobots) && !metaRobots.ToLower().Contains("noindex"))
+                    {
+                        var externalUrl = page.GetFullUrl(culture.Key);
+
+                        if (!string.IsNullOrEmpty(externalUrl))
+                        {
+                            var modDate = contentItem.PublishDate.Value;
+                            url.Append($"<url><loc>{externalUrl}</loc><lastmod>{modDate:yyyy-MM-dd}</lastmod></url>");
+                        }
+                    }
+                }
+            }
+        }
+
+        stringBuilder.Append(xmlversion);
+        stringBuilder.Append(urlsetStart);
+        stringBuilder.Append(url);
+        stringBuilder.Append(urlsetEnd);
+
+        // Skriv ut den kompletta XML-strängen till responsen
+        await _contentAccessor.HttpContext.Response.WriteAsync(stringBuilder.ToString());
+
+        // Avsluta exekveringen här för att förhindra att Razor lägger till extra output
+        await _contentAccessor.HttpContext.Response.CompleteAsync();
+    }
+}

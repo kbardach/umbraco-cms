@@ -14,6 +14,7 @@ builder.CreateUmbracoBuilder()
 builder.Services.AddServerSideBlazor();
 
 builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<ISitemapService, SitemapService>();
 builder.Services.AddScoped<IMoviesJob, MoviesJob>();
 
 WebApplication app = builder.Build();
@@ -22,15 +23,6 @@ WebApplication app = builder.Build();
 app.MapBlazorHub();
 
 await app.BootUmbracoAsync();
-
-//app.UseStatusCodePages(async context =>
-//{
-//	if (context.HttpContext.Response.StatusCode == 404)
-//	{
-//		context.HttpContext.Response.Redirect("/error");
-//		await Task.Yield();
-//	}
-//});
 
 app.UseUmbraco()
     .WithMiddleware(u =>
