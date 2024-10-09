@@ -3,6 +3,10 @@ using kim_umbraco.Business.Services;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
+var environmentName = builder.Environment.EnvironmentName;
+builder.Configuration.AddJsonFile($"appsettings.{environmentName}.json", optional: true, reloadOnChange: true);
+builder.Configuration.GetConnectionString("umbracoDbDSN");
+
 builder.CreateUmbracoBuilder()
     .AddBackOffice()
     .AddWebsite()

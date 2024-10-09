@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="Cultiv.Hangfire" Version="4.0.1" />
+    <PackageReference Include="SlowCheetah" Version="2.5.48" />
     <PackageReference Include="Umbraco.Cms" Version="14.2.0" />
   </ItemGroup>
 
@@ -38,5 +39,31 @@
     <RazorCompileOnBuild>false</RazorCompileOnBuild>
     <RazorCompileOnPublish>false</RazorCompileOnPublish>
   </PropertyGroup>
+
+	<!--..............Tillagt för att skapa profiler på databas..................-->
+	<ItemGroup>
+		<ScFilesToTransform Include="appsettings.json">
+			<TransformOnBuild>true</TransformOnBuild>
+			<TransformFile>appsettings.%(Configuration).json</TransformFile>
+			<!-- Specify the transform file -->
+			<Link>appsettings.json</Link>
+			<!-- Ensure Link is defined -->
+			<DestinationFile>appsettings.json</DestinationFile>
+			<!-- Specify the destination file -->
+		</ScFilesToTransform>
+		<ScFilesToTransform Include="appsettings..json">
+			<TransformOnBuild>true</TransformOnBuild>
+			<TransformFile>appsettings.%(Configuration).json</TransformFile>
+			<!-- Specify the transform file -->
+			<Link>appsettings..json</Link>
+			<!-- Ensure Link is defined -->
+			<DestinationFile>appsettings.*.json</DestinationFile>
+			<!-- Specify the destination file -->
+		</ScFilesToTransform>
+	</ItemGroup>
+
+	<Target Name="TransformConfig" AfterTargets="Build">
+		<SlowCheetah.TransformTask Source="@(ScFilesToTransform)" Transform="%(ScFilesToTransform.Identity).config" Destination="%(ScFilesToTransform.Identity)" Condition="Exists('%(ScFilesToTransform.Identity).config')" />
+	</Target>
 
 </Project>

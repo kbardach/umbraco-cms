@@ -23,7 +23,16 @@
       "applicationUrl": "https://localhost:44333;http://localhost:21985",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }      
+      }
+    },
+    "bardach": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "applicationUrl": "https://localhost:44333;http://localhost:21985",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "bardach"
+      }
     }
   }
 }
